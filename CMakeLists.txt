@@ -232,6 +232,7 @@ set(headers
     src/PythonQtUtils.h
     src/PythonQtVariants.h
     src/PythonQtPythonInclude.h
+    extensions/PythonQt_QtAll/PythonQt_QtAll.h
     generated_cpp${generated_cpp_suffix}/PythonQt_QtBindings.h
 )
 
@@ -258,6 +259,8 @@ foreach(qtlib ${qtlibs})
   if (${PythonQt_Wrap_Qt${qt_wrapped_lib}})
 
     ADD_DEFINITIONS(-DPYTHONQT_WRAP_Qt${qt_wrapped_lib})
+
+    list(APPEND sources extensions/PythonQt_QtAll/PythonQt_QtAll.cpp)
 
     set(file_prefix generated_cpp${generated_cpp_suffix}/com_trolltech_qt_${qt_wrapped_lib}/com_trolltech_qt_${qt_wrapped_lib})
 

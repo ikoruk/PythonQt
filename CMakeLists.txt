@@ -316,10 +316,8 @@ if(UNIX)
   endif()
 endif()
 
-target_link_libraries(PythonQt PUBLIC
-              ${PYTHON_LIBRARY}
-              ${QT_LIBRARIES}
-  )
+target_link_libraries(PythonQt PUBLIC ${QT_LIBRARIES})
+target_link_libraries(PythonQt PRIVATE ${PYTHON_LIBRARY})
 
 #-----------------------------------------------------------------------------
 # Install library (on windows, put the dll in 'bin' and the archive in 'lib')

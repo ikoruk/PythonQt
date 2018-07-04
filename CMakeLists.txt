@@ -317,10 +317,35 @@ if(UNIX)
 endif()
 
 target_link_libraries(PythonQt PUBLIC ${QT_LIBRARIES})
-target_link_libraries(PythonQt PRIVATE ${PYTHON_LIBRARY})
 
 #-----------------------------------------------------------------------------
 # Install library (on windows, put the dll in 'bin' and the archive in 'lib')
+
+
+#Enable flag if undefined symbols appear on module import to get notified about the missing symbols at link time
+option(CHECK_UNDEFINED        "Check for undefined symbols"    OFF)
+
+# Strip unnecessary sections of the binary on Linux/Mac OS
+if(APPLE)
+    if(NOT CHECK_UNDEFINED)
+        set_target_properties(PythonQt PROPERTIES LINK_FLAGS "-undefined dynamic_lookup -dead_strip")
+    endif()
+
+    if(NOT ${CMAKE_BUILD_TYPE} MATCHES "Debug")
+        add_custom_command(TARGET PythonQt POST_BUILD COMMAND strip -u -r ${PROJECT_BINARY_DIR}/libPythonQt.dylib)
+    endif()
+else()
+
+    if(CHECK_UNDEFINED)
+        target_link_libraries(PythonQt PRIVATE ${PYTHON_LIBRARIES})
+        set_target_properties(PythonQt PROPERTIES LINK_FLAGS "-Wl,--no-undefined")
+    endif()
+
+    if(NOT ${CMAKE_BUILD_TYPE} MATCHES "Debug")
+        add_custom_command(TARGET PythonQt POST_BUILD COMMAND strip ${PROJECT_BINARY_DIR}/libPythonQt.so)
+    endif()
+endif()
+
 
 install(TARGETS PythonQt EXPORT PythonQtTargets
         RUNTIME DESTINATION ${PythonQt_INSTALL_RUNTIME_DIR}

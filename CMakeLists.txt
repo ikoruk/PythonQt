@@ -309,13 +309,6 @@ target_compile_definitions(PythonQt PUBLIC -DPYTHONQT_USE_RELEASE_PYTHON_FALLBAC
 
 set_target_properties(PythonQt PROPERTIES DEFINE_SYMBOL PYTHONQT_EXPORTS)
 
-if(UNIX)
-  find_package(OpenGL)
-  if(OPENGL_FOUND)
-    target_link_libraries(PythonQt PUBLIC ${OPENGL_LIBRARIES})
-  endif()
-endif()
-
 target_link_libraries(PythonQt PUBLIC ${QT_LIBRARIES})
 
 #-----------------------------------------------------------------------------
